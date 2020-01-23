@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
-class HomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  final email;
+  MyHomePage({this.email});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<HomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Mapz());
@@ -25,7 +27,6 @@ class _MapState extends State<Mapz> {
   TextEditingController locationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   final Set<Marker> _markers = {};
-  final Set<Polyline> _polyline = {};
 
   @override
   void initState() {
@@ -50,7 +51,6 @@ class _MapState extends State<Mapz> {
                   myLocationEnabled: true,
                   compassEnabled: true,
                   markers: _markers,
-                  polylines: _polyline,
                 ),
                 Positioned(
                   top: 50.0,
