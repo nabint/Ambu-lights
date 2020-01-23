@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
-import './mainpage.dart';
+import './home.dart';
 
 class Splash extends StatelessWidget {
   @override
@@ -10,7 +10,7 @@ class Splash extends StatelessWidget {
       image:Image.asset('assets/images/ambo.png'),
       backgroundColor: Colors.white,
       photoSize: 100.0,
-      navigateAfterSeconds: MainPage(),
+      navigateAfterSeconds: HomePage(),
     );
   }
 }

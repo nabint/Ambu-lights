@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "14675122057",
+    "firebase_url": "https://ambu-lights.firebaseio.com",
+    "project_id": "ambu-lights",
+    "storage_bucket": "ambu-lights.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14675122057:android:e1170eea3c695a4f45b358",
+        "android_client_info": {
+          "package_name": "com.example.ambulights"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14675122057-k9s9selcp4bqstrb7i57h6akoufc637l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ambulights",
+            "certificate_hash": "f22d2f47f630c2b19bf2775e58949d9d1ff831b5"
+          }
+        },
+        {
+          "client_id": "14675122057-7ejg6n4b8u2cn0jfltukbe72s7o63ki7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkO2A03k3y81xFAb3W-VCBgyJtPM5z0Ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14675122057-7ejg6n4b8u2cn0jfltukbe72s7o63ki7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
