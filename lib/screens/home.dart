@@ -11,29 +11,26 @@ class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Mapz());
-  } 
+  }
 }
 
 class Mapz extends StatefulWidget {
   @override
   _MapState createState() => _MapState();
-  
 }
 
 class _MapState extends State<Mapz> {
   GoogleMapController mapController;
+  static LatLng _initialPosition;
   TextEditingController locationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
-  static LatLng _initialPosition;
-  LatLng _finalPosition = _initialPosition;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polyline = {};
-  
+
   @override
   void initState() {
     super.initState();
     _getUserLocation();
-    
   }
 
   @override
@@ -55,20 +52,94 @@ class _MapState extends State<Mapz> {
                   markers: _markers,
                   polylines: _polyline,
                 ),
+                Positioned(
+                  top: 50.0,
+                  right: 15.0,
+                  left: 15.0,
+                  child: Container(
+                    height: 50.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(1.0, 5.0),
+                            blurRadius: 10,
+                            spreadRadius: 3)
+                      ],
+                    ),
+                    child: TextField(
+                      cursorColor: Colors.black,
+                      controller: locationController,
+                      decoration: InputDecoration(
+                        icon: Container(
+                          margin: EdgeInsets.only(left: 20, top: 5),
+                          width: 10,
+                          height: 10,
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.black,
+                          ),
+                        ),
+                        hintText: "pick up",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 105.0,
+                  right: 15.0,
+                  left: 15.0,
+                  child: Container(
+                    height: 50.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(1.0, 5.0),
+                            blurRadius: 10,
+                            spreadRadius: 3)
+                      ],
+                    ),
+                    child: TextField(
+                      cursorColor: Colors.black,
+                      controller: destinationController,
+                      textInputAction: TextInputAction.go,
+                      onSubmitted: (value) {},
+                      decoration: InputDecoration(
+                        icon: Container(
+                          margin: EdgeInsets.only(left: 20, top: 5),
+                          width: 10,
+                          height: 10,
+                          child: Icon(
+                            Icons.local_taxi,
+                            color: Colors.black,
+                          ),
+                        ),
+                        hintText: "destination?",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 15.0, top: 16.0),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
   }
 
-
   void _getUserLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
     setState(() {
       _initialPosition = LatLng(position.latitude, position.longitude);
-      locationController.text = placemark[0].name;
     });
   }
 
