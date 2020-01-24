@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
@@ -11,7 +12,6 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email, _password, _hospitalname;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
         title: Text("Create A New Account"),
       ),
       body: Container(
-        decoration: BoxDecoration(image: _buildBackgroundImage()),
-        padding: EdgeInsets.all(10.0),
+        //decoration: BoxDecoration(image: _buildBackgroundImage()),
         child: Center(
           child: Container(
             width: targetWidth,
@@ -32,6 +31,26 @@ class _SignUpPageState extends State<SignUpPage> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
+                      AvatarGlow(
+                        endRadius: 90,
+                        duration: Duration(seconds: 2),
+                        glowColor: Colors.white24,
+                        repeat: true,
+                        repeatPauseDuration: Duration(seconds: 2),
+                        startDelay: Duration(seconds: 1),
+                        child: Material(
+                            elevation: 8.0,
+                            shape: CircleBorder(),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey[100],
+                              //backgroundImage: Image.asset("assets/images/logo.png"),
+                              child: Image.asset("assets/images/logoz.png"),
+                              radius: 70.0,
+                            )),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       _buildEmailTextField(),
                       SizedBox(
                         height: 10.0,
@@ -44,15 +63,25 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      RaisedButton(
-                        onPressed: signUp,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            side: BorderSide(color: Colors.redAccent)),
-                        textColor: Colors.white,
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(color: Colors.redAccent),
+                      Container(
+                        height: 60,
+                        width: 270,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100.0),
+                          color: Colors.red,
+                        ),
+                        child: FlatButton(
+                          onPressed: signUp,
+                          child: Center(
+                            child: Text(
+                              ' Sign Up ',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -68,15 +97,16 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       String emailz = _email.replaceAll('.', ',');
-      String jsonUrlz = "https://ambu-lights.firebaseio.com/users/"+ emailz + "/hospitalname.json";
-      http.put(jsonUrlz,body: json.encode(_hospitalname));
-      print("This is Hospital Name "+_hospitalname);
+      String jsonUrlz = "https://ambu-lights.firebaseio.com/users/" +
+          emailz +
+          "/hospitalname.json";
+      http.put(jsonUrlz, body: json.encode(_hospitalname));
+      print("This is Hospital Name " + _hospitalname);
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password)
-            .then((_) {
-            });
-      
+            .then((_) {});
+
         Navigator.pushReplacementNamed(context, '/');
       } catch (e) {
         print(e.message);
@@ -87,7 +117,12 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildEmailTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'E-Mail', filled: true, fillColor: Colors.white70),
+          labelText: 'E-Mail',
+          filled: true,
+          fillColor: Colors.white70,
+          border: new OutlineInputBorder(
+              borderRadius:
+                  const BorderRadius.all(const Radius.circular(20.0)))),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
         if (value.isEmpty) {
@@ -103,9 +138,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildHospitalName() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Hospital Name', filled: true, fillColor: Colors.white70),
-      validator: (String value){
-        if(value.isEmpty){
+          labelText: 'Hospital Name',
+          filled: true,
+          fillColor: Colors.white70,
+          border: new OutlineInputBorder(
+              borderRadius:
+                  const BorderRadius.all(const Radius.circular(20.0)))),
+      validator: (String value) {
+        if (value.isEmpty) {
           return 'Please Enter a valid hospital name';
         }
       },
@@ -118,7 +158,12 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildPasswordTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Password', filled: true, fillColor: Colors.white70),
+          labelText: 'Password',
+          filled: true,
+          fillColor: Colors.white70,
+          border: new OutlineInputBorder(
+              borderRadius:
+                  const BorderRadius.all(const Radius.circular(20.0)))),
       obscureText: true,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {

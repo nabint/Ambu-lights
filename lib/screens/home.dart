@@ -288,7 +288,7 @@ class _MapState extends State<Mapz> {
         });
       http.put(jsonUrl2,body: json.encode(widget.online));
       print("This is the points " + pointss.toString());
-      //http.put("https://ambu-lights.firebaseio.com/routes/WRCtoArchalBot.json",body: json.encode(pointss));
+      //http.put("https://ambu-lights.firebaseio.com/routes/WRCtoLamachour.json",body: json.encode(pointss));
       _polyline.add(
         Polyline(
             polylineId: PolylineId(_finalPosition.toString()),

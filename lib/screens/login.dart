@@ -1,7 +1,7 @@
 import './home.dart';
 import 'package:flutter/material.dart';
-import './signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class LoginPage extends StatelessWidget {
   final Map<String, dynamic> _formData = {
@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(image: _buildBackgroundImage()),
+        //decoration: BoxDecoration(image: _buildBackgroundImage()),
         child: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -26,49 +26,93 @@ class LoginPage extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    _buildEmailTextField(),
                     SizedBox(
-                      height: 10.0,
+                      height: 20.0,
+                    ),
+                    AvatarGlow(
+                      endRadius: 100,
+                      duration: Duration(seconds: 2),
+                      glowColor: Colors.white24,
+                      repeat: true,
+                      repeatPauseDuration: Duration(seconds: 2),
+                      startDelay: Duration(seconds: 1),
+                      child: Material(
+                          elevation: 8.0,
+                          shape: CircleBorder(),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[100],
+                            //backgroundImage: Image.asset("assets/images/logo.png"),
+                            child: Container(
+                              child: Image.asset("assets/images/logoz.png"),
+                            ),
+                            radius: 70.0,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 0,
+                    ),
+                    Container(
+                      child: _buildEmailTextField(),
+                      decoration: new BoxDecoration(
+                          borderRadius:
+                              new BorderRadius.all(new Radius.circular(20.0))),
+                    ),
+                    SizedBox(
+                      height: 20.0,
                     ),
                     _buildPasswordTextField(),
                     SizedBox(
-                      height: 10.0,
+                      height: 20.0,
                     ),
-                    RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            side: BorderSide(color: Colors.redAccent)),
-                        textColor: Colors.white,
-                        child: Text("Sign In",
-                            style: TextStyle(color: Colors.redAccent)),
+                    Container(
+                      height: 60,
+                      width: 270,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100.0),
+                        color: Colors.red,
+                      ),
+                      child: FlatButton(
                         onPressed: () {
                           final FormState formState = _formKey.currentState;
                           if (formState.validate()) {
                             formState.save();
                             try {
-                              FirebaseAuth.instance.signInWithEmailAndPassword(
-                                  email: _formData['email'],
-                                  password: _formData['password']).then((_){
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(email: _formData['email'],)));
-                                  });
-                              
+                              FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: _formData['email'],
+                                      password: _formData['password'])
+                                  .then((_) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyHomePage(
+                                              email: _formData['email'],
+                                            )));
+                              });
                             } catch (e) {
                               print(e.message);
                             }
                           }
-                        },),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            side: BorderSide(color: Colors.redAccent)),
-                        textColor: Colors.white,
-                        child: Text(
-                          "Create a New User",
-                          style: TextStyle(color: Colors.redAccent),
+                        },
+                        child: Center(
+                          child: Text(
+                            ' SignIn ',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
-                        },)
+                      ),
+                    ),
+                    SizedBox(
+                      height: 300.0,
+                    ),
+                    Text(
+                      "Presented By Team Cicada",
+                      style: TextStyle(color: Colors.red),
+                    )
                   ],
                 ),
               ),
@@ -82,7 +126,12 @@ class LoginPage extends StatelessWidget {
   Widget _buildEmailTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'E-Mail', filled: true, fillColor: Colors.white70),
+          labelText: 'E-Mail',
+          filled: true,
+          fillColor: Colors.white70,
+          border: new OutlineInputBorder(
+              borderRadius:
+                  const BorderRadius.all(const Radius.circular(20.0)))),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
         if (value.isEmpty ||
@@ -100,7 +149,12 @@ class LoginPage extends StatelessWidget {
   Widget _buildPasswordTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Password', filled: true, fillColor: Colors.white70),
+        labelText: 'Password',
+        filled: true,
+        fillColor: Colors.white70,
+        border: new OutlineInputBorder(
+            borderRadius: const BorderRadius.all(const Radius.circular(20.0))),
+      ),
       obscureText: true,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {
