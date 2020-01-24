@@ -5,6 +5,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "AIzaSyAHbxSS8nMi8aJb5kEUEW8Xvn654abk1gc");
 
 class MyHomePage extends StatefulWidget {
   final String email;
@@ -40,6 +45,7 @@ class _MapState extends State<Mapz> {
   String formattedDate = DateFormat('yyyy-MM-dd').format(now);
   final Set<Polyline> _polyline = {};
   String hospitalName;
+  String placeDescription;
 
   @override
   void deactivate() {
@@ -57,12 +63,7 @@ class _MapState extends State<Mapz> {
     super.initState();
     String emailz = widget.email.replaceAll('.', ',');
     print(emailz);
-    http.get("https://ambu-lights.firebaseio.com/users/"+ emailz + "/timestamp.json").then((http.Response response){
-      hospitalName = json.decode(response.body);
-    });
-    print("Thissss HospitalName " + hospitalName);
     String jsonUr3l = "https://ambu-lights.firebaseio.com/users/"+ emailz + "/timestamp.json";
-
     http.put(jsonUr3l,body: json.encode(formattedDate));
     _getUserLocation();
   }
@@ -148,8 +149,31 @@ class _MapState extends State<Mapz> {
                       cursorColor: Colors.black,
                       controller: destinationController,
                       textInputAction: TextInputAction.go,
+                      onTap: () async{
+                          Prediction p = await PlacesAutocomplete.show(
+                          context:context,apiKey: "AIzaSyAHbxSS8nMi8aJb5kEUEW8Xvn654abk1gc",
+                          mode:Mode.overlay 
+                        );
+                        setState(() {
+                          placeDescription = p.description;
+                          destinationController.text = placeDescription;
+                        });
+                        //displayPrediction(p);
+                      },
+                      onChanged: (value) async{
+                          Prediction p = await PlacesAutocomplete.show(
+                          context:context,apiKey: "AIzaSyAHbxSS8nMi8aJb5kEUEW8Xvn654abk1gc",
+                          mode:Mode.overlay 
+                        );
+                        setState(() {
+                          placeDescription = p.description;
+                          destinationController.text = placeDescription;
+                        });
+                        //displayPrediction(p);
+                      },
                       onSubmitted: (value) {
-                        sendRequest(value);
+                        print("PLACE Description submited "+placeDescription);
+                        sendRequest(placeDescription);
                       },
                       decoration: InputDecoration(
                         icon: Container(
@@ -174,6 +198,30 @@ class _MapState extends State<Mapz> {
   }
 
   Widget _buildSideDrawer() {
+    String emailz = widget.email.replaceAll('.', ',');
+    http.get("https://ambu-lights.firebaseio.com/users/"+ emailz + "/hospitalname.json").then((http.Response response){
+      setState(() {
+      hospitalName = json.decode(response.body);
+      print(hospitalName);
+      });
+    });
+    if(hospitalName==null)
+    {
+      return Drawer(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 70.0,),
+          Text("User",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20.0),),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text(widget.email),
+          ),
+          Divider(),
+          ],
+        ),
+      );
+    }
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -186,13 +234,13 @@ class _MapState extends State<Mapz> {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.local_hospital),
-            title: Text(hospitalName)
-          )
-        ],
-      ),
+            leading: Icon(Icons.person),
+            title: Text(hospitalName),
+          ),
+          ],
+        ),
     );
-  }
+    }
 
   void _getUserLocation() async {
     Position position = await Geolocator()
@@ -313,5 +361,22 @@ class _MapState extends State<Mapz> {
     _addMarker(destination, intendedLocation);
     String route = await _locationpath.getRouteCoordinates(_initialPosition, destination);
     createRoute(route);
-  }  
+  }
+
+
+  Future<Null> displayPrediction(Prediction p) async {
+     if (p != null) {
+      PlacesDetailsResponse detail =
+      await _places.getDetailsByPlaceId(p.placeId);
+      print("Places type "+ detail.runtimeType.toString());
+      var placeId = p.placeId;
+      double lat = detail.result.geometry.location.lat;
+      double lng = detail.result.geometry.location.lng;
+      var address = await Geocoder.local.findAddressesFromQuery(p.description);
+
+      print(lat);
+      print(lng);
+    }
+    
+}
 }
