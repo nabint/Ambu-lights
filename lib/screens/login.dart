@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
 import './home.dart';
+import 'package:flutter/material.dart';
+import './signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatelessWidget {
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
   };
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
@@ -43,12 +46,12 @@ class LoginPage extends StatelessWidget {
                           if (formState.validate()) {
                             formState.save();
                             try {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:(context)=>MyHomePage(email: _formData['email'],)
-                                )
-                              );
+                              FirebaseAuth.instance.signInWithEmailAndPassword(
+                                  email: _formData['email'],
+                                  password: _formData['password']).then((_){
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(email: _formData['email'],)));
+                                  });
+                              
                             } catch (e) {
                               print(e.message);
                             }
@@ -64,6 +67,7 @@ class LoginPage extends StatelessWidget {
                           style: TextStyle(color: Colors.redAccent),
                         ),
                         onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
                         },)
                   ],
                 ),
@@ -81,7 +85,9 @@ class LoginPage extends StatelessWidget {
           labelText: 'E-Mail', filled: true, fillColor: Colors.white70),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
-        if (value.isEmpty) {
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
           return 'Please enter a valid email';
         }
       },

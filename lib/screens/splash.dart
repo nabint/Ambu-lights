@@ -1,7 +1,6 @@
 import 'package:ambulights/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
-import './home.dart';
 
 class Splash extends StatelessWidget {
   @override
