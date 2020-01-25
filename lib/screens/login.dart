@@ -109,10 +109,18 @@ class LoginPage extends StatelessWidget {
                     SizedBox(
                       height: 300.0,
                     ),
-                    Text(
-                      "Presented By Team Cicada",
-                      style: TextStyle(color: Colors.red),
-                    )
+                    Center(
+                      child:Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text("Presented By "),
+                          Text(
+                            "Team Cicada",
+                            style: TextStyle(color: Colors.red),
+                          )
+                        ],
+                      ),
+                    ),),
                   ],
                 ),
               ),
