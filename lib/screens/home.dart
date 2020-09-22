@@ -9,7 +9,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 
-GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "AIzaSyAHbxSS8nMi8aJb5kEUEW8Xvn654abk1gc");
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "ee AIzaSyAHbxSS8nMi8aJb5kEUEW8Xvn654abk1gc");
 
 class MyHomePage extends StatefulWidget {
   final String email;
